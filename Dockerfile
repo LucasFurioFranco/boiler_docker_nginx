@@ -10,12 +10,10 @@ COPY . /app
 
 WORKDIR /app
 
-#RUN ./git_config.sh
-
 RUN npm install
 
 RUN npm install -g nodemon
 
-EXPOSE 7050
+EXPOSE 10070
 
 CMD [ "nodemon", "index.js" ]

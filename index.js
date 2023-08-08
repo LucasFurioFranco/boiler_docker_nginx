@@ -1,7 +1,7 @@
 const express    = require('express')
 
 const app = express()
-const port = 7050;
+const port = 10070;
 const sys_name = "reuso-eco-br-docker-www V0"
 
 

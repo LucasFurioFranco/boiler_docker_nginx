@@ -3,16 +3,18 @@
 #execute it doing this: ./run.sh
 #have phun!
 
-
+port=10070
+img_name="lf2_dev_br"
+cnt_name="lf2-dev-br"
 
 #Stops the currently runing container, if there is one
-echo "Running: docker stop brobath-docker-www"
-docker stop reuso-eco-br-docker-www
+echo 'docker stop $cnt_name'
+docker stop $cnt_name
 
 
 #Deletes the current "brobath-test" docker container
-echo "Running: docker container rm brobath-docker-www"
-docker container rm reuso-eco-br-docker-www
+echo 'docker container rm $cnt_name'
+docker container rm $cnt_name
 
 
 #Generates the sys_data JS module file
@@ -22,7 +24,9 @@ NL=''
 
 sdj=''
 sdj=$sdj'const sys_data = {'$NL
-sdj=$sdj'  "git_commit_id": "'$(git rev-parse --short HEAD)'"'${NL}
+
+sdj=$sdj'  "git_commit_id": "'$(git rev-parse --short HEAD)'",'$NL
+sdj=$sdj'  "name": "'$img_name'"'$NL
 sdj=$sdj'};'$NL
 sdj=$sdj'module.exports = sys_data;'
 
@@ -32,26 +36,21 @@ echo $sdj > $FILE_NAME
 
 #To build the docker image:
 #NOTE: you must be in the Dockerfile directory with tour terminal
-echo "Running: docker build -t brobath_docker_www ."
-docker build -t reuso_eco_br_docker_www .
+echo 'docker build -t ${img_name} .'
+docker build -t $img_name .
 
 
 #To run naming it but not on background (to see the live console.logs)
-#docker run --name brobath-docker-www --publish 5002:5002 brobath_docker_www
+#docker run --name $cnt_name --publish $port:$port $img_name
 
-
-#For the creation of the template, when there is not an package.json yet
-#(would break the npm install)
-#docker run -it --name brobath-docker-www --publish 5002:5002 brobath_docker_www /bin/bash
 
 #To run naming it and on background:
-echo "Running: docker run --name brobath-docker-www -d --publish 5002:5002 brobath_docker_www"
-docker run --name reuso-eco-br-docker-www -d --publish 7050:7050 reuso_eco_br_docker_www
+echo 'docker run --name $cnt_name -d --publish $port:$port $img_name'
+docker run --name $cnt_name -d --publish $port:$port $img_name
 
 
 
 #Prints the status of the running containers after deploying this one!
-echo "Running: docker ps"
 docker ps
 
 
